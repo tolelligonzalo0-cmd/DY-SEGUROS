@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D&Y Seguros - Cotización Premium</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: linear-gradient(135deg, #020617, #0f172a);
+      color: white;
+      margin: 0;
+    }
+    header {
+      padding: 25px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      background: rgba(0,0,0,0.6);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .container {
+      max-width: 520px;
+      margin: 50px auto;
+      background: rgba(2,6,23,0.85);
+      padding: 35px;
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    }
+    h2 { text-align: center; }
+    p { text-align: center; font-size: 14px; opacity: 0.8; }
+    input, select {
+      width: 100%;
+      padding: 14px;
+      margin-top: 12px;
+      border-radius: 10px;
+      border: none;
+      background: #1e293b;
+      color: white;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 15px;
+      border-radius: 10px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .primary { background: linear-gradient(90deg, gold, #facc15); color: black; }
+    .instagram { background: #E1306C; color: white; }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      text-align: center;
+      display: none;
+    }
+
+    /* BOTÓN FLOTANTE WHATSAPP */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #25D366;
+      color: white;
+      border-radius: 50px;
+      padding: 14px 18px;
+      font-size: 14px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+      z-index: 1000;
+    }
+
+    .whatsapp-float:hover {
+      background: #1ebe5d;
+    }
+  </style>
+</head>
+<body>
+
+<header>D&Y SEGUROS</header>
+
+<div class="container">
+  <h2>Cotizá tu seguro 🚗</h2>
+  <p>Recibí tu cotización en minutos y asesoramiento personalizado</p>
+
+  <input id="marca" placeholder="Marca del vehículo">
+  <input id="modelo" placeholder="Modelo">
+  <input id="anio" type="number" placeholder="Año">
+
+  <select id="uso">
+    <option value="particular">Uso particular</option>
+    <option value="uber">Uber / Cabify</option>
+    <option value="comercial">Uso comercial</option>
+  </select>
+
+  <select id="zona">
+    <option value="bajo">Zona tranquila</option>
+    <option value="medio">Zona media</option>
+    <option value="alto">Zona de alto riesgo</option>
+  </select>
+
+  <select id="cobertura">
+    <option>Terceros</option>
+    <option>Terceros completo</option>
+    <option>Todo riesgo</option>
+  </select>
+
+  <input id="nombre" placeholder="Tu nombre">
+  <input id="telefono" placeholder="Teléfono">
+
+  <button class="primary" onclick="cotizar()">Calcular cotización</button>
+
+  <div id="resultado" class="result"></div>
+
+  <button class="instagram" onclick="irInstagram()">Instagram</button>
+</div>
+
+<footer style="text-align:center; padding:20px; font-size:14px; opacity:0.8;">
+  📞 Contacto: 2615383659
+</footer>
+
+<!-- BOTÓN FLOTANTE -->
+<a class="whatsapp-float" href="https://wa.me/5492615331418?text=Hola!%20Vengo%20de%20la%20web%20de%20D%26Y%20Seguros%20y%20quiero%20cotizar%20mi%20vehículo%20🚗" target="_blank">
+  💬 WhatsApp
+</a>
+
+<script>
+let precioFinal = 0;
+
+const preciosBase = {
+  terceros: 20000,
+  tercerosCompleto: 27000,
+  todoRiesgo: 35000
+};
+
+function cotizar() {
+  const anio = parseInt(document.getElementById('anio').value);
+  const cobertura = document.getElementById('cobertura').value;
+  const uso = document.getElementById('uso').value;
+  const zona = document.getElementById('zona').value;
+  const marca = document.getElementById('marca').value.toLowerCase();
+
+  let base = 0;
+
+  if (cobertura === 'Terceros') base = preciosBase.terceros;
+  if (cobertura === 'Terceros completo') base = preciosBase.tercerosCompleto;
+  if (cobertura === 'Todo riesgo') base = preciosBase.todoRiesgo;
+
+  if (anio >= 2022) base += 15000;
+  else if (anio >= 2018) base += 10000;
+  else if (anio >= 2014) base += 6000;
+  else base += 3000;
+
+  if (uso === 'uber') base += 12000;
+  if (uso === 'comercial') base += 8000;
+
+  if (zona === 'medio') base += 4000;
+  if (zona === 'alto') base += 8000;
+
+  if (marca.includes('bmw') || marca.includes('audi')) base += 15000;
+  if (marca.includes('toyota') || marca.includes('ford')) base += 5000;
+
+  precioFinal = base;
+
+  const resultado = document.getElementById('resultado');
+  resultado.style.display = 'block';
+  resultado.innerHTML = `💰 Estimación mensual: <strong>$${precioFinal}</strong><br><small>*Cotización estimada</small>`;
+}
+
+function irInstagram() {
+  window.open('https://instagram.com/dy.seguros', '_blank');
+}
+</script>
+
+</body>
+</html>
